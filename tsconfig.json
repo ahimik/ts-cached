@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "strictPropertyInitialization": false,
+        "baseUrl": ".",
+        "outDir": "./dist",
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "sourceMap": true,
+        "declaration": true,
+        "downlevelIteration": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "target": "es6",
+        "module": "commonjs",
+        "lib": ["es2016", "dom"]
+    },
+    "include": ["src/**/*.ts"]
+}

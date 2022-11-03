@@ -1,0 +1,42 @@
+{
+    "name": "ts-cache",
+    "version": "0.0.21",
+    "main": "./index.js",
+    "module": "./esm5/index.js",
+    "es2015": "./esm2015/index.js",
+    "types": "./index.d.ts",
+    "scripts": {
+        "test": "karma start",
+        "prebuild": "npx eslint src",
+        "build:cjs": "tsc",
+        "build:esm5": "tsc --p tsconfig.esm5.json",
+        "build:esm2015": "tsc --p tsconfig.esm2015.json",
+        "build": "shx rm -rf ./dist && npm run build:cjs && npm run build:esm5 && npm run build:esm2015",
+        "pack": "npm run build && shx cp package.json dist && cd dist && npm pack",
+        "prepublishOnly": "npm test"
+    },
+    "private": true,
+    "peerDependencies": {
+        "rxjs": "^6.4.0 || ^7.4.0"
+    },
+    "devDependencies": {
+        "@types/jasmine": "^2.8.6",
+        "@types/node": "^12.0.12",
+        "@typescript-eslint/eslint-plugin": "^5.40.1",
+        "@typescript-eslint/parser": "^5.40.1",
+        "codelyzer": "^6.0.2",
+        "eslint": "^7.26.0",
+        "jasmine": "^3.1.0",
+        "jasmine-marbles": "^0.9.0",
+        "rxjs": "^7.5.7",
+        "karma": "^4.1.0",
+        "karma-chrome-launcher": "^2.2.0",
+        "karma-commonjs": "^1.0.0",
+        "karma-jasmine": "^2.0.1",
+        "karma-typescript": "^5.5.2",
+        "shx": "^0.3.4",
+        "tslib": "^2.3.1",
+        "tslint": "~5.15.0",
+        "typescript": "~4.3.2"
+    }
+}
