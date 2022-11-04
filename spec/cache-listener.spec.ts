@@ -1,7 +1,5 @@
 import { Observable, of, Subject } from 'rxjs';
 import { Cacheable, CacheInvalidate, CacheUpdate, GlobalCacheConfig, InvalidationInfo, UpdateInfo } from '../src';
-import { CacheManager } from '../src/cache/cache.manager';
-import { DEFAULT_GLOBAL_CACHE_CONFIG } from '../src/cache/config/default-global-cache.config';
 import { VOID } from '../src/types/void';
 import { generateCacheKey } from './utils/cache-key.generator';
 import { nextCacheName } from './utils/cache-name.generator';
@@ -10,11 +8,10 @@ import { User, user1, user2, user3 } from './utils/user';
 describe('Cache Listeners >', () => {
 
     beforeEach(() => {
-        GlobalCacheConfig.set(DEFAULT_GLOBAL_CACHE_CONFIG);
+        GlobalCacheConfig.resetToDefaults();
     });
 
     afterEach(() => {
-        CacheManager.getAllCaches().forEach(cache => cache.invalidateAll());
     });
 
     // it('Should execute cache listener when cache get updated', async () => {

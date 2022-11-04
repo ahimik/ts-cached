@@ -1,20 +1,15 @@
 import { defer, Observable, of } from 'rxjs';
-import { Cacheable, CacheLogger, CacheUpdate, LoggingLevel } from '../src';
-import { CacheManager } from '../src/cache/cache.manager';
-import { DEFAULT_GLOBAL_CACHE_CONFIG } from '../src/cache/config/default-global-cache.config';
-import { GlobalCacheConfig } from '../src';
+import { Cacheable, CacheUpdate, GlobalCacheConfig } from '../src';
 import { nextCacheName } from './utils/cache-name.generator';
 import { User, user1, user2, user3 } from './utils/user';
 
 describe('Cache Update >', () => {
 
     beforeEach(() => {
-        GlobalCacheConfig.set(DEFAULT_GLOBAL_CACHE_CONFIG);
-        CacheLogger.setLoggingLevel(LoggingLevel.WARN);
+        GlobalCacheConfig.resetToDefaults();
     });
 
     afterEach(() => {
-        CacheManager.getAllCaches().forEach(cache => cache.invalidateAll());
     });
 
     it('Should always execute original cache update method', async () => {

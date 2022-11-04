@@ -1,9 +1,6 @@
 import { Observable, of } from 'rxjs';
-import { Cacheable, CacheUpdate, StorageFactory } from '../src';
-import { SyncCache } from '../src/cache/cache';
+import { Cacheable, CacheUpdate, GlobalCacheConfig, StorageFactory } from '../src';
 import { CacheManager } from '../src/cache/cache.manager';
-import { DEFAULT_GLOBAL_CACHE_CONFIG } from '../src/cache/config/default-global-cache.config';
-import { GlobalCacheConfig } from '../src';
 import { DefaultSyncCacheBuilder } from '../src/cache/default-sync-cache.builder';
 import { KeyValuePair } from '../src/cache/model/key-value-pair';
 import { generateCacheKey } from './utils/cache-key.generator';
@@ -13,13 +10,12 @@ import { User, user1, user2, user3 } from './utils/user';
 describe('Cache Storage >', () => {
 
     beforeEach(() => {
-        GlobalCacheConfig.set(DEFAULT_GLOBAL_CACHE_CONFIG);
+        GlobalCacheConfig.resetToDefaults();
         jasmine.clock().uninstall();
         jasmine.clock().install();
     });
 
     afterEach(() => {
-        CacheManager.getAllCaches().forEach((cache: SyncCache) => cache.invalidateAll());
         jasmine.clock().uninstall();
         localStorage.clear();
     });

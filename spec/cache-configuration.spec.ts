@@ -1,7 +1,6 @@
 import { Observable, of } from 'rxjs';
 import { Cacheable, GlobalCacheConfig, SyncStorage } from '../src';
 import { CacheManager } from '../src/cache/cache.manager';
-import { DEFAULT_GLOBAL_CACHE_CONFIG } from '../src/cache/config/default-global-cache.config';
 import { VOID } from '../src/types/void';
 import { generateCacheKey } from './utils/cache-key.generator';
 import { nextCacheName } from './utils/cache-name.generator';
@@ -10,13 +9,12 @@ import { User, user1 } from './utils/user';
 describe('Cache Configuration >', () => {
 
     beforeEach(() => {
-        GlobalCacheConfig.set(DEFAULT_GLOBAL_CACHE_CONFIG);
+        GlobalCacheConfig.resetToDefaults();
         jasmine.clock().uninstall();
         jasmine.clock().install();
     });
 
     afterEach(() => {
-        CacheManager.getAllCaches().forEach(cache => cache.invalidateAll());
         jasmine.clock().uninstall();
     });
 
@@ -27,7 +25,7 @@ describe('Cache Configuration >', () => {
 
         const keyGenerator = (...args: any[]) => customCacheKey;
 
-        GlobalCacheConfig.update({keyGenerator});
+        GlobalCacheConfig.set({keyGenerator});
 
         class Service {
 
@@ -82,7 +80,7 @@ describe('Cache Configuration >', () => {
         const customStorageGetSpy = spyOn(customStorage, 'get').and.callThrough();
         const customStoragePutSpy = spyOn(customStorage, 'put').and.callThrough();
 
-        GlobalCacheConfig.update({storageFactory: () => customStorage});
+        GlobalCacheConfig.set({storageFactory: () => customStorage});
 
         class Service {
 
@@ -110,7 +108,7 @@ describe('Cache Configuration >', () => {
         const cacheName = nextCacheName();
         const maxSize = 1;
 
-        GlobalCacheConfig.update({maxSize});
+        GlobalCacheConfig.set({maxSize});
 
         class Service {
 
@@ -136,7 +134,7 @@ describe('Cache Configuration >', () => {
         const globalMaxSize = 5;
         const maxSize = 3;
 
-        GlobalCacheConfig.update({maxSize: globalMaxSize});
+        GlobalCacheConfig.set({maxSize: globalMaxSize});
 
         class Service {
 
@@ -161,7 +159,7 @@ describe('Cache Configuration >', () => {
         const cacheName = nextCacheName();
         const expireAfterWrite = 100;
 
-        GlobalCacheConfig.update({expireAfterWrite});
+        GlobalCacheConfig.set({expireAfterWrite});
 
         class Service {
 
@@ -187,7 +185,7 @@ describe('Cache Configuration >', () => {
         const globalExpireAfterWrite = 50;
         const expireAfterWrite = 100;
 
-        GlobalCacheConfig.update({expireAfterWrite: globalExpireAfterWrite});
+        GlobalCacheConfig.set({expireAfterWrite: globalExpireAfterWrite});
 
         class Service {
 
@@ -214,7 +212,7 @@ describe('Cache Configuration >', () => {
         const cacheName = nextCacheName();
         const expireAfterAccess = 100;
 
-        GlobalCacheConfig.update({expireAfterAccess});
+        GlobalCacheConfig.set({expireAfterAccess});
 
         class Service {
 
@@ -242,7 +240,7 @@ describe('Cache Configuration >', () => {
         const globalExpireAfterAccess = 50;
         const expireAfterAccess = 100;
 
-        GlobalCacheConfig.update({expireAfterAccess: globalExpireAfterAccess});
+        GlobalCacheConfig.set({expireAfterAccess: globalExpireAfterAccess});
 
         class Service {
 

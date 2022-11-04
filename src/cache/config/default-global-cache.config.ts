@@ -7,5 +7,5 @@ import { GlobalCacheConfiguration } from './global-cache.config';
  */
 export const DEFAULT_GLOBAL_CACHE_CONFIG: GlobalCacheConfiguration = {
     storageFactory: StorageFactory.inMemoryStorage(),
-    keyGenerator: DEFAULT_CACHE_KEY_GENERATOR,
+    keyGenerator: DEFAULT_CACHE_KEY_GENERATOR
 };

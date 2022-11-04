@@ -8,6 +8,7 @@ import { CacheEntry } from './model/cache-entry';
 import { CacheKey } from './model/cache-key';
 import { CacheName } from './model/cache-name';
 import { CacheInvalidateListener, CacheUpdateListener } from './model/cache.listener';
+import { SyncCacheStorageConfig } from './model/config/cache-storage.config';
 import { KeyValuePair } from './model/key-value-pair';
 import { UnlessCondition } from './model/unless-condition';
 import { SyncCacheStorage } from './storage/cache-storage';
@@ -16,10 +17,7 @@ import { CacheStorageMaxSizeController } from './storage/cache-storage-max-size.
 /**
  * Default sync cache configuration.
  */
-export interface DefaultSyncCacheConfig<E> {
-    maxSize?: number;
-    expireAfterWrite?: number;
-    expireAfterAccess?: number;
+export interface DefaultSyncCacheConfig<E> extends SyncCacheStorageConfig {
     updateListeners?: CacheUpdateListener[];
     invalidateListeners?: CacheInvalidateListener[];
     invalidateOn?: Observable<any> | Observable<any>[];

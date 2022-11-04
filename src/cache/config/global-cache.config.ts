@@ -25,20 +25,20 @@ export class GlobalCacheConfig {
     /**
      * Partially updates current global cache configuration.
      */
-    static update(config: Partial<GlobalCacheConfiguration>): void {
-        this.set({
+    static set(config: Partial<GlobalCacheConfiguration>): void {
+        const mergedConfig = {
             ...this.config,
             ...config
-        });
+        };
+        this.validate(mergedConfig);
+        this.config = mergedConfig;
     }
 
     /**
-     * Replaces current global cache configuration.
-     * @param config - new configuration
+     * Resets current global cache configuration to DEFAULT VALUES.
      */
-    static set(config: GlobalCacheConfiguration): void {
-        this.validate(config);
-        this.config = config;
+    static resetToDefaults(): void {
+        this.config = DEFAULT_GLOBAL_CACHE_CONFIG;
     }
 
     private static validate(config: GlobalCacheConfiguration): void {
