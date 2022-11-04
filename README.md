@@ -211,7 +211,7 @@ class UserService {
 ```
 
 By default, `@CacheInvalidate()` decorator will find and invalidate all caches within the same class if cache name is not specified,
-however you can explicitly specify cache names(s) to invalidate:
+however you can specify caches to be invalidated by explicitly providing cache names:
 
 ```ts
 class UserService {
@@ -242,7 +242,7 @@ class UserService {
 }
 ```
 
-## Cache Invalidation configuration
+## Cache Invalidate Configuration
 
 `@CacheInvalidate()` decorator function takes the following configuration:
 
@@ -261,13 +261,13 @@ operation is completed.
 
 # Updating Cache
 
-Sometimes when you modify any value or object you want the value in cache to be updated with the new value directly
+Sometimes when you modify value which is subject for caching, you want the value in cache to be updated with the new value directly
 without making any extra server calls.
 
-`@CacheUpdate()` decorator is dedicated to do so:
+`@CacheUpdate()` decorator is designed to do that:
 
 ```ts
-import { CacheParamIgnore } from './cache-param-ignore.decorator';
+import { CacheParamIgnore } from 'ts-cache';
 
 const USER_CACHE = 'userCache';
 
@@ -307,9 +307,9 @@ listerer?: Subject<UpdateInfo> | (info: UpdateInfo) => void - subject or callbac
 
 ```
 
-## Concurrent Cache Updates
+## Concurrent Cache Writes
 
-Default cache implementation **joins** simultaneous identical cache updates:
+Default cache implementation **joins** simultaneous identical cache write operations:
 
 ```ts
 class UserService {
@@ -339,12 +339,13 @@ class UIComponent {
 
 ## Saving cache to local storage
 
-If you want to persist your cache to local storage you can use pre-built `BrowserLocalCacheStorage` implementation:
+If you want to persist your cache to browser local storage you can use pre-built `BrowserLocalCacheStorage` implementation:
 
 ```ts
 import { StorageFactory } from './storage.factory';
 
 const storageFactory = StorageFactory.browserLocalStorage({storageKeyPrefix: 'my-storage-key-prefix'});
+// You can use storage prefix to find your cache entries in browser local storage
 
 class UserService {
 
