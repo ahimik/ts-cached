@@ -1,11 +1,11 @@
 # ts-cache
 
-A simple yet powerful type agnostic caching library based on typescript decorators.
-The library supports asynchronous types such as Promise and Observable as well
-as regular synchronous function calls. There are a few simple steps required
-to begin with a common caching scenario, however it is flexible enough for advanced usage.
+A simple yet powerful type agnostic caching library based on typescript decorators. The library supports asynchronous
+types such as Promise and Observable as well as regular synchronous function calls. There are a few simple steps
+required to begin with a common caching scenario, however it is flexible enough for advanced usage.
 
 Main benefits:
+
 - Simple declarative usage
 - Type agnostic
 - Requests joining
@@ -53,15 +53,17 @@ class UserService {
 }
 ```
 
-**Note:** 
+**Note:**
 Cache decorator needs to run the original method at least once in order to determine function return type.
 
-For automatic return type resolution you can install `npm i reflect-metadata` package
-and set `emitDecoratorMetadata: true` option in your `tsconfig.json`.
-Then at the first line of your application import the installed package: 
+For automatic return type resolution you can install `npm i reflect-metadata` package and
+set `emitDecoratorMetadata: true` option in your `tsconfig.json`. Then at the first line of your application import the
+installed package:
+
 ```
 import 'reflect-metadata';
 ```
+
 This will save excessive original function calls in some edge cases, however this is not required.
 
 It's recommended to assign cache names in order to identify your caches:
@@ -81,14 +83,14 @@ class UserService {
     listCountries(): Observable<Country[]> {
         return this.httpClient.get<Country[]>('/countries');
     }
-    
+
 }
 ```
 
 ## Cache parameters
 
-Cache key is built of all method arguments by default. However, you can explicitly specify method
-arguments which should be included into a cache key using `@CacheParam()` decorator like this:
+Cache key is built of all method arguments by default. However, you can explicitly specify method arguments which should
+be included into a cache key using `@CacheParam()` decorator like this:
 
 ```ts
 import { CacheParam } from 'ts-cache';
@@ -111,14 +113,15 @@ You can also map parameter value if needed:
 class UserService {
 
     @Cacheable()
-    findUserByObject(@CacheParam(object => object.id) object: {id: string}): Observable<User> {
+    findUserByObject(@CacheParam(object => object.id) object: { id: string }): Observable<User> {
         return this.httpClient.get<User>(`/user/${object.id}`);
     }
-    
+
 }
 ```
 
-`@CacheParam(object => object.nested.id)` - specifies that cache key must be build of `id` property extracted from object.
+`@CacheParam(object => object.nested.id)` - specifies that cache key must be build of `id` property extracted from
+object.
 
 ## Conditional caching
 
@@ -134,7 +137,7 @@ class UserService {
     getUser(): Observable<User | null> {
         return this.httpClient.get<User | null>(`/user`);
     }
-    
+
 }
 ```
 
@@ -142,35 +145,17 @@ class UserService {
 
 `@Cacheable()` decorator function takes the following configuration:
 
-`cacheName?: string` - the name of the cache.
-
-`maxSize?: number` - Maximum number of cache entries.
-The oldest cache entry will be deleted automatically once maximum size is exceeded.
-
-`expireAfterWrite?: number` - Max time within which the entry is valid after being added to cache.
-
-`expireAfterAccess?: number` - Max time within which the entry is valid after being last read from cache.
-
-`storageFactory?: (cacheName: string) => SyncStorage<E>` - Storage factory function.
-You can use one of the pre-built options:
-
-- `StorageFactory.inMemoryStorage()` - creates new in-memory cache storage
-- `StorageFactory.browserLocalStorage()` - creates new cache storage which persists cache to browser local storage
- 
-or provide your own storage by implementing `SyncStorage` interface.
-
-`filter?: (...args: any[]) => boolean` - a predicate that allows you to cache conditionally based on passed method arguments' values.
-
-`keyGenerator?: (..args: any[]) => string` - custom key generator function which takes all included cache parameters and must return cache key as a string.
-
-`invalidateOn?: Observable<any> | string | Array<string | Observable<any>>` - cache invalidation source. 
-It can be an observable(s) or a cache name(s).
-If observable is provided all cache entries get invalidated on each value received from observable.
-If cache name is provided, current cache gets invalidated completely when dependent source cache(s) is updated or invalidated.
-
-`unless?: (value) => boolean` - function which allows caching values conditionally.
-For example, you can omit caching nulls by specifying:
-`(value) => value != null` - which basically means: "cache values unless it's a null or undefined value"
+| Parameter    | Type          |  Description  |
+|--------------|:-------------:|:-------------:|
+| `cacheName` | `string` | the name of the cache |
+| `maxSize` | `number` | Maximum number of cache entries. The oldest cache entry will be deleted automatically once maximum size is exceeded. |
+| `expireAfterWrite` | `number` | Max time within which the entry is valid after being added to cache |
+| `expireAfterAccess` | `number` | Max time within which the entry is valid after being last read from cache |
+| `storageFactory` | `(cacheName: string) => SyncStorage<E>` | Storage factory function. You can use one of pre-built options or provide your own implementation. |
+| `filter` | `(...args: any[]) => boolean` | a predicate that allows you to cache conditionally based on passed method arguments' values |
+| `keyGenerator` | `(..args: any[]) => string` | custom key generator function which takes all included cache parameters and must return cache key as a string |
+| `invalidateOn` | `Observable<any>, string, Array<string, Observable<any>>` | cache invalidation source. It can be an observable(s) or a cache name(s). If observable is provided all cache entries get invalidated on each value received from observable. If cache name is provided, current cache gets invalidated completely when dependent source cache(s) is updated or invalidated. |
+| `unless` | `(value) => boolean` | function which allows caching values conditionally. For example, you can omit caching nulls by specifying: `(value) => value != null` - which basically means: "cache values unless it's a null or undefined value" |
 
 # Invalidating cache
 
@@ -210,8 +195,8 @@ class UserService {
 }
 ```
 
-By default, `@CacheInvalidate()` decorator will find and invalidate all caches within the same class if cache name is not specified,
-however you can specify caches to be invalidated by explicitly providing cache names:
+By default, `@CacheInvalidate()` decorator will find and invalidate all caches within the same class if cache name is
+not specified, however you can specify caches to be invalidated by explicitly providing cache names:
 
 ```ts
 class UserService {
@@ -246,23 +231,19 @@ class UserService {
 
 `@CacheInvalidate()` decorator function takes the following configuration:
 
-`cacheName?: string | string[]` - cache name(s) to invalidate.
-
-`all?: boolean` - whether to invalidate all cache entries regardless of a cache key value. 
-
-`filter?: (...args: any[]) => boolean` - a predicate that allows you to conditionally invalidate cache based on the passed method argument values at runtime
-
-`instant?: boolean` - whether to invalidate cache instantly or when observable or promise is completed.
-
-`keyGenerator?: (..args: any[]) => string` - custom key generator function which accepts all included cache parameters and must return cache key as a string
-
-`listerer?: Subject<InvalidateInfo> | (info: InvalidateInfo) => void` - subject or callback function which gets executed once
-operation is completed. 
+| Parameter    | Type          |  Description  |
+|--------------|:-------------:|:-------------:|
+| `cacheName` | `string`, `string[]` | cache name(s) to be invalidated |
+| `all` | `boolean` | whether to invalidate all cache entries regardless of a cache key value |
+| `instant` | `boolean` | whether to invalidate cache instantly or when observable or promise is completed. |
+| `filter` | `(...args: any[]) => boolean` | a predicate that allows you to conditionally invalidate cache based on the passed method argument values at runtime |
+| `keyGenerator` | `(..args: any[]) => string` | custom key generator function which accepts all included cache parameters and must return cache key as a string |
+| `listerer` | `Subject<InvalidateInfo>, (info: InvalidateInfo) => void` | subject or callback function which gets executed once operation is completed. |
 
 # Updating Cache
 
-Sometimes when you modify value which is subject for caching, you want the value in cache to be updated with the new value directly
-without making any extra server calls.
+Sometimes when you modify value which is subject for caching, you want the value in cache to be updated with the new
+value directly without making any extra server calls.
 
 `@CacheUpdate()` decorator is designed to do that:
 
@@ -296,16 +277,12 @@ You can put `@CacheUpdate()` on a method which returns Promise similar to `@Cach
 
 `@CacheUpdate()` decorator function takes the following configuration:
 
-```
-cacheName?: string | string[] - cache name(s) to be updated.
-
-filter?: (...args: any[]) => boolean - a predicate allows you to conditionally update cache based on the actual method arguments values.
-
-keyGenerator?: (..args: any[]) => string - custom key generator function which accepts all included cache parameters and must return cache key as a string value.
-
-listerer?: Subject<UpdateInfo> | (info: UpdateInfo) => void - subject or callback function which gets executed once operation is completed. 
-
-```
+| Parameter    | Type          |  Description  |
+|--------------|:-------------:|:-------------:|
+| `cacheName` | `string`, `string[]` | cache name(s) to be updated |
+| `filter` | `(...args: any[]) => boolean` | a predicate that allows you to conditionally invalidate cache based on the passed method argument values at runtime |
+| `keyGenerator` | `(..args: any[]) => string` | custom key generator function which accepts all included cache parameters and must return cache key as a string |
+| `listerer` | `Subject<UpdateInfo>, (info: UpdateInfo) => void` | subject or callback function which gets executed once operation is completed |
 
 ## Concurrent Cache Writes
 
@@ -328,7 +305,7 @@ class UIComponent {
 
     findUser(): void {
         forkJoin([
-            this.userService.findUser(), 
+            this.userService.findUser(),
             this.userService.findUser(),
             this.userService.findUser()
         ]).subscribe(); // This will run only one server request
@@ -339,12 +316,14 @@ class UIComponent {
 
 ## Saving cache to local storage
 
-If you want to persist your cache to browser local storage you can use pre-built `BrowserLocalCacheStorage` implementation:
+If you want to persist your cache to browser local storage you can use pre-built `BrowserLocalCacheStorage`
+implementation:
 
 ```ts
 import { StorageFactory } from './storage.factory';
 
 const storageFactory = StorageFactory.browserLocalStorage({storageKeyPrefix: 'my-storage-key-prefix'});
+
 // You can use storage prefix to find your cache entries in browser local storage
 
 class UserService {
@@ -389,8 +368,8 @@ export interface GlobalCacheConfig {
 
 # Cacheable Stream
 
-Cacheable stream is a special type of cache which represents the endless stream of value changes over a time.
-Let's take an example:
+Cacheable stream is a special type of cache which represents the endless stream of value changes over a time. Let's take
+an example:
 
 ```ts
 import { CacheParamIgnore } from './cache-param-ignore.decorator';
@@ -414,20 +393,19 @@ class UserService {
 
 }
 ```
-`#1` - Opens endless stream which emits user values over a time.
-New subscribers will immediately receive the last value emitted by stream.
 
-`#2` - Invalidates the stream. Generally re-subscribes to the original observable and caches the result again.
-All existing subscribers will receive the new value as soon as source observable is completed.
+`#1` - Opens endless stream which emits user values over a time. New subscribers will immediately receive the last value
+emitted by stream.
 
-`#3` - Directly emits a new value to the stream and cache it.
-All existing subscribers will receive the new value.
+`#2` - Invalidates the stream. Generally re-subscribes to the original observable and caches the result again. All
+existing subscribers will receive the new value as soon as source observable is completed.
+
+`#3` - Directly emits a new value to the stream and cache it. All existing subscribers will receive the new value.
 
 # Logging
 
-There is a simple cache logger which provides error and warning messages when something goes wrong.
-There are 4 logging levels: INFO, WARN, ERROR and NONE. Default level is ERROR.
-You can change the default logging level like this:
+There is a simple cache logger which provides error and warning messages when something goes wrong. There are 4 logging
+levels: INFO, WARN, ERROR and NONE. Default level is ERROR. You can change the default logging level like this:
 
 ```ts
 import { CacheLogger, LoggingLevel } from './cache-logger';
@@ -438,6 +416,6 @@ CacheLogger.setLoggingLevel(LoggingLevel.NONE);
 ## Performance
 
 Since the library was designed primary for front-end usage, the focus was put on usability rather than on performance,
-since the performance requirements are not so stringent as on a server side.
-However, it's still performant enough to handle large amount of data unless you save it to browser local storage
-and can be easily tuned to speed up even more if required.
+since the performance requirements are not so stringent as on a server side. However, it's still performant enough to
+handle large amount of data unless you save it to browser local storage and can be easily tuned to speed up even more if
+required.

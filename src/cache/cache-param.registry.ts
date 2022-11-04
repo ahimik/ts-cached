@@ -9,7 +9,7 @@ export class CacheParamRegistry {
     private static params = new Map<Object, Map<PropertyKey, CacheParamConfig[]>>();
 
     /**
-     * Registers method's cache
+     * Registers method's cache parameter
      * @param object - target object
      * @param propertyKey - target object's property key
      * @param param - parameter configuration
