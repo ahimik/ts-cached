@@ -1,5 +1,5 @@
 {
-    "name": "ts-cache",
+    "name": "ts-cached",
     "version": "0.0.1-beta.1",
     "main": "./dist/index.js",
     "module": "./dist/esm5/index.js",
@@ -10,11 +10,11 @@
     "author": "Aliaksandr Himik",
     "repository": {
         "type": "git",
-        "url": "https://github.com/ahimik/ts-cache.git"
+        "url": "https://github.com/ahimik/ts-cached.git"
     },
-    "homepage": "https://github.com/ahimik/ts-cache#readme",
+    "homepage": "https://github.com/ahimik/ts-cached#readme",
     "bugs": {
-        "url": "https://github.com/ahimik/ts-cache/issues"
+        "url": "https://github.com/ahimik/ts-cached/issues"
     },
     "keywords": [
         "cache",
@@ -25,7 +25,10 @@
         "decorator",
         "typescript",
         "memory",
-        "local-storage"
+        "local storage",
+        "lru",
+        "ttl",
+        "memoize"
     ],
     "scripts": {
         "test": "karma start",
@@ -45,7 +48,6 @@
         "@types/node": "^12.0.12",
         "@typescript-eslint/eslint-plugin": "^5.40.1",
         "@typescript-eslint/parser": "^5.40.1",
-        "codelyzer": "^6.0.2",
         "eslint": "^7.26.0",
         "jasmine": "^3.1.0",
         "jasmine-marbles": "^0.9.0",
@@ -60,5 +62,7 @@
         "tslint": "~5.15.0",
         "typescript": "~4.3.2"
     },
-    "files": ["dist"]
+    "files": [
+        "dist"
+    ]
 }

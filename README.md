@@ -1,4 +1,4 @@
-# ts-cache
+# ts-cached
 
 A simple yet powerful type agnostic caching library based on typescript decorators. The library supports asynchronous
 types such as Promise and Observable as well as regular synchronous function calls. There are a few simple steps
@@ -13,7 +13,7 @@ Main benefits:
 
 # Installing
 
-Run `npm i ts-cache` to install the library into your project via NPM.
+Run `npm i ts-cached` to install the library into your project via NPM.
 
 # Table of contents
 
@@ -107,7 +107,7 @@ Cache key is built of all method arguments by default. However, you can explicit
 be included into a cache key using `@CacheParam()` decorator like this:
 
 ```ts
-import { CacheParam } from 'ts-cache';
+import { CacheParam } from 'ts-cached';
 
 class UserService {
 
@@ -305,7 +305,7 @@ value directly without making any extra server calls.
 `@CacheUpdate()` decorator is designed to do that:
 
 ```ts
-import { CacheParamIgnore } from 'ts-cache';
+import { CacheParamIgnore } from 'ts-cached';
 
 const USER_CACHE = 'userCache';
 
@@ -377,7 +377,7 @@ If you want to persist your cache to browser local storage you can use pre-built
 implementation:
 
 ```ts
-import { StorageFactory } from 'ts-cache';
+import { StorageFactory } from 'ts-cached';
 
 const storageFactory = StorageFactory.browserLocalStorage({storageKeyPrefix: 'my-storage-key-prefix'});
 
@@ -398,7 +398,7 @@ class UserService {
 You can set some cache parameters globally:
 
 ```ts
-import { GlobalCacheConfig } from 'ts-cache';
+import { GlobalCacheConfig } from 'ts-cached';
 
 GlobalCacheConfig.set({
     storageFactory: myCustomStorageFactory,
@@ -463,7 +463,7 @@ There is a simple cache logger which provides error and warning messages when so
 levels: INFO, WARN, ERROR and NONE. Default level is ERROR. You can change the default logging level like this:
 
 ```ts
-import { CacheLogger, LoggingLevel } from './cache-logger';
+import { CacheLogger, LoggingLevel } from 'ts-cached';
 
 CacheLogger.setLoggingLevel(LoggingLevel.NONE);
 ```
