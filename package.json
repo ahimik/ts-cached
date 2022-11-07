@@ -1,21 +1,42 @@
 {
     "name": "ts-cache",
-    "version": "0.0.21",
-    "main": "./index.js",
-    "module": "./esm5/index.js",
-    "es2015": "./esm2015/index.js",
-    "types": "./index.d.ts",
+    "version": "0.0.1-beta.1",
+    "main": "./dist/index.js",
+    "module": "./dist/esm5/index.js",
+    "es2015": "./dist/esm2015/index.js",
+    "types": "./dist/index.d.ts",
+    "description": "Observable/Promise Cache Decorator",
+    "license": "MIT",
+    "author": "Aliaksandr Himik",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ahimik/ts-cache.git"
+    },
+    "homepage": "https://github.com/ahimik/ts-cache#readme",
+    "bugs": {
+        "url": "https://github.com/ahimik/ts-cache/issues"
+    },
+    "keywords": [
+        "cache",
+        "caching",
+        "cacheable",
+        "observable",
+        "promise",
+        "decorator",
+        "typescript",
+        "memory",
+        "local-storage"
+    ],
     "scripts": {
         "test": "karma start",
-        "prebuild": "npx eslint src",
+        "lint": "npx eslint src",
         "build:cjs": "tsc",
         "build:esm5": "tsc --p tsconfig.esm5.json",
         "build:esm2015": "tsc --p tsconfig.esm2015.json",
-        "build": "shx rm -rf ./dist && npm run build:cjs && npm run build:esm5 && npm run build:esm2015",
-        "pack": "npm run build && shx cp package.json dist && cd dist && npm pack",
-        "prepublishOnly": "npm test"
+        "build:all": "shx rm -rf ./dist && npm run build:cjs && npm run build:esm5 && npm run build:esm2015",
+        "pretest": "npm run lint",
+        "prepublishOnly": "npm test && npm run build:all"
     },
-    "private": true,
     "peerDependencies": {
         "rxjs": "^6.4.0 || ^7.4.0"
     },
@@ -38,5 +59,6 @@
         "tslib": "^2.3.1",
         "tslint": "~5.15.0",
         "typescript": "~4.3.2"
-    }
+    },
+    "files": ["dist"]
 }

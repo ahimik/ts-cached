@@ -15,7 +15,21 @@ Main benefits:
 
 Run `npm i ts-cache` to install the library into your project via NPM.
 
-# Caching
+# Table of contents
+
+* [Caching](#caching)
+* [Cache parameters](#cache_parameters)
+* [Conditional caching](#conditional_caching)
+* [Cache Configuration](#cache_configuration)
+* [Cache invalidation](#invalidating_cache)
+* [Cache updates](#updating_cache)
+* [Saving cache to browser local storage](#saving_cache_to_local_storage)
+* [Global cache configuration](#global_cache_configuration)
+* [Cacheable stream](#cacheable_stream)
+* [Logging](#logging)
+* [Performance](#performance)
+
+# <a name="caching"></a> Caching
 
 Simply put `@Cacheable()` decorator on a method which requires caching:
 
@@ -87,7 +101,7 @@ class UserService {
 }
 ```
 
-## Cache parameters
+## <a name="cache_parameters"></a> Cache parameters
 
 Cache key is built of all method arguments by default. However, you can explicitly specify method arguments which should
 be included into a cache key using `@CacheParam()` decorator like this:
@@ -123,7 +137,7 @@ class UserService {
 `@CacheParam(object => object.nested.id)` - specifies that cache key must be build of `id` property extracted from
 object.
 
-## Conditional caching
+## <a name="conditional_caching"></a> Conditional caching
 
 By default, the library caches `null` and does not cache `undefined` values. `undefined` is the reserved value type
 which internally means there is no value in cache.
@@ -141,7 +155,7 @@ class UserService {
 }
 ```
 
-## Cache configuration
+## <a name="cache_configuration"></a>Cache configuration
 
 `@Cacheable()` decorator function takes the following configuration:
 
@@ -157,7 +171,7 @@ class UserService {
 | `invalidateOn` | `Observable<any>, string, Array<string, Observable<any>>` | cache invalidation source. It can be an observable(s) or a cache name(s). If observable is provided all cache entries get invalidated on each value received from observable. If cache name is provided, current cache gets invalidated completely when dependent source cache(s) is updated or invalidated. |
 | `unless` | `(value) => boolean` | function which allows caching values conditionally. For example, you can omit caching nulls by specifying: `(value) => value != null` - which basically means: "cache values unless it's a null or undefined value" |
 
-# Invalidating cache
+# <a name="invalidating_cache"></a> Invalidating cache
 
 There are multiple ways to invalidate cache and the simplest one is to use `@CacheInvalidate()` decorator:
 
@@ -227,6 +241,49 @@ class UserService {
 }
 ```
 
+You can also invalidate cache by providing notifier-observable directly to `@Cacheable()` decorator:
+
+```ts
+const somethingHappens = new Subject<any>();
+
+somethingHappens.next(); // This will notify user cache to invalidate completely
+
+class UserService {
+
+    @Cacheable({invalidateOn: somethingHappens.asObservable()}) // Invalidates user cache completely on each event 
+    findUserById(id: string): Observable<User> {
+        return this.httpClient.get<User>(`/user/${id}`);
+    }
+
+}
+
+```
+
+or provide dependent cache name to get cache invalidated cascade when the dependent cache is updated or invalidated:
+
+```ts
+const ALL_USERS_CACHE = 'allUsersCache';
+
+class UserService {
+
+    @Cacheable(ALL_USERS_CACHE) // Declares users cache
+    listAllUsers(): Observable<User[]> {
+        return this.httpClient.get<User[]>(`/users`);
+    }
+
+    @Cacheable({ // Declares 2nd level cache
+        invalidateOn: ALL_USERS_CACHE  // Invalidates cache completely when ALL_USERS_CACHE cache changes
+    })
+    findUserById(id: string): Observable<User> {
+        return this.listAllUsers().pipe(
+            map(allUsers => allUsers.find(user => user.id === id))
+        );
+    }
+
+}
+
+```
+
 ## Cache Invalidate Configuration
 
 `@CacheInvalidate()` decorator function takes the following configuration:
@@ -240,7 +297,7 @@ class UserService {
 | `keyGenerator` | `(..args: any[]) => string` | custom key generator function which accepts all included cache parameters and must return cache key as a string |
 | `listerer` | `Subject<InvalidateInfo>, (info: InvalidateInfo) => void` | subject or callback function which gets executed once operation is completed. |
 
-# Updating Cache
+# <a name="updating_cache"></a> Updating Cache
 
 Sometimes when you modify value which is subject for caching, you want the value in cache to be updated with the new
 value directly without making any extra server calls.
@@ -314,17 +371,17 @@ class UIComponent {
 }
 ```
 
-## Saving cache to local storage
+## <a name="saving_cache_to_local_storage"></a> Saving cache to local storage
 
 If you want to persist your cache to browser local storage you can use pre-built `BrowserLocalCacheStorage`
 implementation:
 
 ```ts
-import { StorageFactory } from './storage.factory';
+import { StorageFactory } from 'ts-cache';
 
 const storageFactory = StorageFactory.browserLocalStorage({storageKeyPrefix: 'my-storage-key-prefix'});
 
-// You can use storage prefix to find your cache entries in browser local storage
+// Tip: you can use storage key prefix to find and invalidate your caches in browser local storage if needed
 
 class UserService {
 
@@ -336,7 +393,7 @@ class UserService {
 }
 ```
 
-# Global cache configuration
+# <a name="global_cache_configuration"></a> Global cache configuration
 
 You can set some cache parameters globally:
 
@@ -366,14 +423,12 @@ export interface GlobalCacheConfig {
 }
 ```
 
-# Cacheable Stream
+# <a name="cacheable_stream"></a> Cacheable Stream
 
 Cacheable stream is a special type of cache which represents the endless stream of value changes over a time. Let's take
 an example:
 
 ```ts
-import { CacheParamIgnore } from './cache-param-ignore.decorator';
-
 class UserService {
 
     @CacheableStream()  // #1
@@ -402,7 +457,7 @@ existing subscribers will receive the new value as soon as source observable is 
 
 `#3` - Directly emits a new value to the stream and cache it. All existing subscribers will receive the new value.
 
-# Logging
+# <a name="logging"></a> Logging
 
 There is a simple cache logger which provides error and warning messages when something goes wrong. There are 4 logging
 levels: INFO, WARN, ERROR and NONE. Default level is ERROR. You can change the default logging level like this:
@@ -413,7 +468,7 @@ import { CacheLogger, LoggingLevel } from './cache-logger';
 CacheLogger.setLoggingLevel(LoggingLevel.NONE);
 ```
 
-## Performance
+## <a name="performance"></a> Performance
 
 Since the library was designed primary for front-end usage, the focus was put on usability rather than on performance,
 since the performance requirements are not so stringent as on a server side. However, it's still performant enough to
