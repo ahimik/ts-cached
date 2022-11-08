@@ -134,7 +134,7 @@ class UserService {
 }
 ```
 
-`@CacheParam(object => object.nested.id)` - specifies that cache key must be build of `id` property extracted from
+`@CacheParam(object => object.id)` - specifies that cache key must be build of `id` property extracted from
 object.
 
 ## <a name="conditional_caching"></a> Conditional caching
@@ -295,7 +295,7 @@ class UserService {
 | `instant` | `boolean` | whether to invalidate cache instantly or when observable or promise is completed. |
 | `filter` | `(...args: any[]) => boolean` | a predicate that allows you to conditionally invalidate cache based on the passed method argument values at runtime |
 | `keyGenerator` | `(..args: any[]) => string` | custom key generator function which accepts all included cache parameters and must return cache key as a string |
-| `listerer` | `Subject<InvalidateInfo>, (info: InvalidateInfo) => void` | subject or callback function which gets executed once operation is completed. |
+| `listener` | `Subject<InvalidateInfo>, (info: InvalidateInfo) => void` | subject or callback function which gets executed once operation is completed. |
 
 # <a name="updating_cache"></a> Updating Cache
 
@@ -339,7 +339,7 @@ You can put `@CacheUpdate()` on a method which returns Promise similar to `@Cach
 | `cacheName` | `string`, `string[]` | cache name(s) to be updated |
 | `filter` | `(...args: any[]) => boolean` | a predicate that allows you to conditionally invalidate cache based on the passed method argument values at runtime |
 | `keyGenerator` | `(..args: any[]) => string` | custom key generator function which accepts all included cache parameters and must return cache key as a string |
-| `listerer` | `Subject<UpdateInfo>, (info: UpdateInfo) => void` | subject or callback function which gets executed once operation is completed |
+| `listener` | `Subject<UpdateInfo>, (info: UpdateInfo) => void` | subject or callback function which gets executed once operation is completed |
 
 ## Concurrent Cache Writes
 
